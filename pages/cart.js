@@ -14,9 +14,13 @@ export default function CartDetails() {
     const {
         cart: {cartItems},
     } = state;
-    const removeItemHandler = (item)=> {
-        dispatch ({type: 'CART_REMOVE_ITEM', payload: item})
+    const removeItemHandler = (item) => {
+        dispatch({type: 'CART_REMOVE_ITEM', payload: item})
 
+    }
+    const updateCartHandler = (item , qty)=> {
+        const quantity = Number(qty);
+        dispatch({type: 'CART_ADD_ITEM', payload: {...item, quantity}})
     }
     return (
         <Layout title="Shopping Cart">
@@ -55,11 +59,17 @@ export default function CartDetails() {
                                         </Link>
                                     </td>
                                     <td className="p-5 text-right">
-                                        {item.quantity}
+                                        <select value={item.quantity} onChange={(e)=> updateCartHandler(item, e.target.value)}>
+                                            {
+                                                [...Array(item.countInStock).keys()].map(x => (
+                                                    <option key={x + 1} value={x + 1}>{x + 1}</option>
+                                                ))
+                                            }
+                                        </select>
                                     </td>
                                     <td className="p-5 text-right">${item.price}</td>
                                     <td className="p-5 text-center">
-                                        <button onClick={()=> removeItemHandler(item)}>
+                                        <button onClick={() => removeItemHandler(item)}>
                                             <XCircleIcon className="h-5 w-5"></XCircleIcon>
                                         </button>
                                     </td>
@@ -78,7 +88,7 @@ export default function CartDetails() {
                             </li>
                             <li>
                                 <button
-                                    onClick={()=> router.push('/shipping')}
+                                    onClick={() => router.push('/shipping')}
                                     className="primary-button w-full"
                                 >
                                     Check Out
