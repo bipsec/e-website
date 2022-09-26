@@ -6,8 +6,10 @@ import Layout from "../components/Layout";
 import Link from "next/link";
 import Image from "next/image";
 import {useRouter} from "next/router";
+import dynamic from "next/dynamic";
 
-export default function CartDetails() {
+
+function CartDetails() {
     const router = useRouter();
     const {state, dispatch} = useContext(Store);
 
@@ -102,3 +104,5 @@ export default function CartDetails() {
 
     );
 }
+
+export default dynamic(()=> Promise.resolve(CartDetails), {ssr:false})
